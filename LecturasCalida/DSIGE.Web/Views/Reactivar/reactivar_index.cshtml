@@ -1,0 +1,443 @@
+﻿@{
+    ViewBag.Title = "reactivar_index";
+    Layout = "~/Views/Shared/_LayoutPrincipal.cshtml";
+}
+
+
+
+@Styles.Render("~/Content/dataTables-bootstrap/css/dataTables.bootstrap.min.css")
+@Scripts.Render("~/Content/dataTables-bootstrap/js/jquery.dataTables.min.js")
+@Scripts.Render("~/Content/dataTables-bootstrap/js/dataTables.bootstrap.min.js")
+
+@Styles.Render("~/Content/bootstrap-datepicker/css/bootstrap-datepicker.min.css")
+@Scripts.Render("~/Content/bootstrap-datepicker/js/bootstrap-datepicker.min.js")
+@Scripts.Render("~/Content/bootstrap-datepicker/locales/bootstrap-datepicker.es.min.js")
+
+@Scripts.Render("~/Content/bootstrap/js/bootstrap-filestyle.min.js")
+@Scripts.Render("~/Scripts/jquery.fileDownload.js")
+@Scripts.Render("~/Content/angular/angular.js")
+
+
+<style type="text/css">
+    .nav-tabs {
+        border-bottom: 0;
+    }
+
+    #_archivo.btn-info {
+        background-image: none;
+        color: inherit;
+        background-color: inherit !important;
+    }
+
+    .modal-dialog {
+        width: 300px;
+    }
+
+    .datepicker {
+        width: 200px;
+    }
+
+    .form-control {
+        font-size: 11px;
+        width: 100%;
+        height: 28px;
+    }
+
+    input[type="text"] {
+        font-size: 11px;
+    }
+
+    body {
+        font-size: 10.5px;
+        font-family: tahoma;
+    }
+
+    .label-primary {
+        background-color: #337ab7;
+        font-size: 11px;
+    }
+
+    .label-danger {
+        background-color: red;
+        font-size: 11px;
+    }
+    .ui-pnotify-title {
+        font-size: 20px !important;
+    }
+
+    .ui-pnotify-text {
+        display: block;
+        font-size: 15px !important;
+    }
+
+</style>
+
+
+
+<script type="text/javascript">
+
+        var app = angular.module('MyApp', []).directive('onFinishRender', function ($timeout) {
+            return {
+                restrict: 'A',
+                link: function (scope, element, attr) {
+                    if (scope.$last === true) {
+                        $timeout(function () {
+                            scope.$emit('ngRepeatFinished');
+                        });
+                    }
+                }
+            }
+        }).directive('fileModel', ['$parse', function ($parse) {
+            return {
+                restrict: 'A',
+                link: function (scope, element, attrs) {
+                    var model = $parse(attrs.fileModel);
+                    var modelSetter = model.assign;
+
+                    element.bind('change', function () {
+                        scope.$apply(function () {
+                            modelSetter(scope, element[0].files[0]);
+                        });
+                    });
+                }
+            };
+            }]);
+
+        app.directive('ngEnter', function () {
+            return function (scope, element, attrs) {
+                element.bind("keydown keypress", function (event) {
+                    if (event.which === 13) {
+                        scope.$apply(function () {
+                            scope.$eval(attrs.ngEnter);
+                        });
+
+                        event.preventDefault();
+                    }
+                });
+            };
+        });
+
+        app.service('fileUpload', ['$http', function ($http) {
+            this.uploadFileToUrl = function (idlocal, file, uploadUrl) {
+
+                var fd = new FormData();
+                $http.post(uploadUrl, fd, {
+
+                    transformRequest: angular.identity,
+                    headers: { 'Content-Type': undefined }
+                })
+                .success(function (data) {
+
+                })
+                .error(function () {
+
+                });
+
+            }
+        }]);
+
+        app.controller('MyController', function ($scope, $timeout, $http, fileUpload) {
+
+            $(function () {
+                $('#f_inicial').datepicker({
+                    format: 'dd/mm/yyyy',
+                    language: 'es',
+                    autoclose: true
+                });
+            });
+            
+            $scope.dataSuministro = {
+                suministro: '',
+                nroInstalacion: '',
+                nroSerie: '',
+                cliente: '',
+                direccion: ''
+            }
+
+            $scope.getData = function () {
+                $scope.ListandoCorteCuentaContrato();
+            }
+            $scope.valor = false;
+
+            $scope.reactivar = function () {
+
+                if (document.getElementById("cortess").checked != true && document.getElementById("reconexioness").checked != true && document.getElementById("grandesClientes").checked != true) {
+                    new PNotify({
+                        title: 'Sistemas',
+                        text: 'Por favor seleccione un Servicio. Muchas gracias.',
+                        type: 'error'
+                    });
+                    return false;
+                }
+
+                var tiposervicio = 0;
+                let mensajeAlerta = '';
+
+                if (document.getElementById("cortess").checked == true) {
+                    tiposervicio = document.getElementById('cortess').value;
+                    mensajeAlerta = 'Por favor ingresar el suministro';
+                }
+                else if (document.getElementById("reconexioness").checked == true) {
+                    tiposervicio = document.getElementById('reconexioness').value;
+                    mensajeAlerta = 'Por favor ingresar el suministro';
+                }
+                else if (document.getElementById("grandesClientes").checked == true) {
+                    tiposervicio = document.getElementById('grandesClientes').value;
+                    nombreServicio = "Grandes Clientes";
+                    mensajeAlerta = 'Por favor ingresar el codigo EMR';
+                }
+
+                if (document.getElementById('suministro').value == "") { 
+
+                    new PNotify({
+                        title: 'Sistemas',
+                        text: mensajeAlerta,
+                        type: 'error'
+                    });
+                    return false;
+                } 
+
+                (new PNotify({
+                    title: 'Sistemas Confirmación ',
+                    text: 'Esta seguro de Reactivar el suministro .?',
+                    icon: 'glyphicon glyphicon-question-sign',
+                    hide: false,
+                    confirm: {
+                        confirm: true
+                    },
+                    buttons: {
+                        closer: false,
+                        sticker: false
+                    },
+                    history: {
+                        history: false
+                    }
+                })).get().on('pnotify.confirm', function () {
+
+                    var fecha_ini = document.getElementById('f_inicial').value;
+                    var suministro = document.getElementById('suministro').value;
+
+                    $('.sige-load').show();
+                    var variables = {
+                        method: 'POST',
+                        url: '../NoCortar/reactivar_cortesReconexiones',
+                        headers: {
+                            'Content-Type': 'application/json; charset=utf-8'
+                        },
+                        data: {
+                            id_tiposervicio: parseInt(tiposervicio),
+                            fecha_asignacion: fecha_ini,
+                            suministro: suministro
+                        }
+                    }
+                    $http(variables)
+                        .success(function (res) {
+                            $('.sige-load').hide();
+                            if (res.ok == true) {
+                                new PNotify({
+                                    title: ' ',
+                                    text: 'Activacion realizada Exitosamente.',
+                                    type: 'success'
+                                });
+                                $scope.valor = false;
+                            } else {
+                                alert(JSON.stringify(res.data))
+                            }
+                        })
+                        .error(function (err) {
+                            $('.sige-load').hide();
+                            alert(JSON.stringify(err))
+                        });
+
+                }).on('pnotify.cancel', function () {
+
+                });
+            }
+
+            $scope.ListandoCorteCuentaContrato = function () {
+
+                if (document.getElementById("cortess").checked != true && document.getElementById("reconexioness").checked != true && document.getElementById("grandesClientes").checked != true) {
+                    new PNotify({
+                        title: 'Sistemas',
+                        text: 'Por favor seleccione un Servicio. Muchas gracias.',
+                        type: 'error'
+                    });
+                    return false;
+                }
+
+                let mensajeAlerta = '';
+                if (document.getElementById("cortess").checked == true) {
+                    tiposervicio = document.getElementById('cortess').value;
+                    mensajeAlerta = 'Por favor ingresar el suministro';
+                }
+                else if (document.getElementById("reconexioness").checked == true) {
+                    tiposervicio = document.getElementById('reconexioness').value;
+                    mensajeAlerta = 'Por favor ingresar el suministro';
+                }
+                else if (document.getElementById("grandesClientes").checked == true) {
+                    tiposervicio = document.getElementById('grandesClientes').value;
+                    nombreServicio = "Grandes Clientes";
+                    mensajeAlerta = 'Por favor ingresar el codigo EMR';
+                }
+
+                if (document.getElementById('suministro').value == "") {
+                    new PNotify({
+                        title: 'Sistemas',
+                        text: mensajeAlerta,
+                        type: 'error'
+                    });
+                    return false;
+                }
+
+                var fecha_ini = document.getElementById('f_inicial').value;
+                var suministro = document.getElementById('suministro').value;
+                $scope.valor = false;
+
+                $('.sige-load').show();
+                var variables = {
+                    method: 'POST',
+                    url: '../NoCortar/ListarSumnistroCorte',
+                    headers: {
+                        'Content-Type': 'application/json; charset=utf-8'
+                    },
+                    data: {
+                        id_tiposervicio: parseInt(tiposervicio),
+                        fecha_asignacion: fecha_ini,
+                        suministro: suministro
+                    }
+                }
+
+                $http(variables)
+                    .success(function (data) {
+                        $('.sige-load').hide();
+                        if (data == 0) {
+                            new PNotify({
+                                title: 'Sistemas',
+                                text: 'No se encuentra información con el Nro de Suministro en el servicio de ' + nombreServicio,
+                                type: 'error'
+                            });
+                        } else {
+                            $scope.dataSuministro.nroInstalacion = data[0].cor_suministro;
+                            $scope.dataSuministro.nroSerie = data[0].cor_medidor;
+                            $scope.dataSuministro.cliente = data[0].crea_nombre;
+                            $scope.dataSuministro.direccion = data[0].cor_direccion;
+                            $scope.valor = true;
+                        }
+                    })
+                    .error(function () {
+                        alert('Lo sentimos, Ocurrio un problema, vuelva a intentar.')
+                    });
+            }
+            
+            $scope.Limpiar = function () {
+                $scope.dataSuministro.suministro = "";
+                $scope.dataSuministro.nroInstalacion = "";
+                $scope.dataSuministro.nroSerie = "";
+                $scope.dataSuministro.cliente = "";
+                $scope.dataSuministro.direccion = "";
+                $scope.valor = false;
+            }
+
+
+            $scope.TipoServicioRadio = 3;
+
+
+
+
+
+
+
+        });
+
+</script>
+
+<html>
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+</head>
+<body >
+    <div class="container" ng-app="MyApp" ng-controller="MyController" style="margin-top: -10px;" ng-init="inicializando();">
+ 
+        <div class="   panel panel-oscuro" style="margin-top: -17px;">
+            <div class="panel-heading">
+                <h6><i class="fa fa-table fa-lg"></i> REACTIVAR CORTES , RECONEXIONES y GRANDES CLIENTES </h6>
+            </div>
+            <div class="panel-body container">
+                <div class="well" style="background: #314b75; color: white;  margin-top: -5px;">
+                    <div class="row">
+                        <div class="col-md-12">
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class=" col-xs-6 col-sm-6 col-md-3">
+                                <label for="_usuario" class="control-label">Fecha Asignacion</label>
+                                <input class="form-control" style="width: 290px" id="f_inicial" placeholder="dia/mes/año" type="text" value="@DateTime.Now.ToString("dd/MM/yyyy")" />
+                            </div>
+                         </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-xs-12 col-sm-8 col-md-7 " style="font-size: 20px;">
+                                <div style="margin-top:15px;">
+                                    <input type="radio" id="cortess" checked="checked" name="optradio" value="3" ng-model="TipoServicioRadio" > <label for="cortess"> CORTES </label>
+                                    <input type="radio" id="reconexioness" name="optradio" value="4" ng-model="TipoServicioRadio" > <label for="reconexioness"> RECONEXIONES </label>
+                                    <input type="radio" id="grandesClientes" name="optradio" value="7" ng-model="TipoServicioRadio"> <label for="grandesClientes"> GRANDES CLIENTES </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-sm-4 col-md-3">
+                                <label for="txt_nombre_cliente"> {{ TipoServicioRadio == 3 || TipoServicioRadio == 4 ? 'Cuenta contrato' : 'Codigo EMR'}}  </label>
+                                @*<input name="suministro" ng-enter="getData();" style="border-radius:5px; border-radius: 5px; color: red;background-color: beige; font-size: 15px; font-weight: 600;" id="suministro" class="form-control" ng-model="dataSuministro.suministro" placeholder="Cuenta Contrato" maxlength="15" onkeypress="if (event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;">*@
+
+                                <input name="suministro" ng-if="TipoServicioRadio == 3 || TipoServicioRadio == 4" ng-enter="getData();" style="border-radius:5px; border-radius: 5px; color: red;background-color: beige; font-size: 15px; font-weight: 600;" id="suministro" class="form-control" ng-model="dataSuministro.suministro" placeholder="Cuenta Contrato" maxlength="15" onkeypress="if (event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;">
+                                <input name="suministro" ng-if="TipoServicioRadio == 7" ng-enter="getData();" style="border-radius:5px; border-radius: 5px; color: red;background-color: beige; font-size: 15px; font-weight: 600;" id="suministro" class="form-control" ng-model="dataSuministro.suministro" placeholder="Codigo EMR" >
+
+
+                            </div>
+                            <div class=" col-sm-4 col-md-3"  ng-if="TipoServicioRadio == 3 || TipoServicioRadio == 4"  >
+                                <label for="pwd">Nro Instalacion:</label>
+                                <input name="suministro" style="border-radius:5px;" disabled ng-model="dataSuministro.nroInstalacion" class="form-control" placeholder="Nro Instalacion">
+                            </div>
+                            <div class="col-sm-4 col-md-3"  ng-if="TipoServicioRadio == 3 || TipoServicioRadio == 4" >
+                                <label for="pwd">Nro Serie Medidor:</label>
+                                <input name="suministro" style="border-radius:5px;" disabled ng-model="dataSuministro.nroSerie" class="form-control" placeholder="Nro Serie Medidor">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-6">
+                                <label for="txt_direccion"> Cliente </label>
+                                <input type="email" class="form-control" disabled ng-model="dataSuministro.cliente" id="email" placeholder="Cliente">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="txt_distrito"> Direccion </label>
+                                <input type="text" class="form-control" disabled ng-model="dataSuministro.direccion" id="pwd" placeholder="Direccion">
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <button type="submit" ng-click="reactivar();" ng-if="valor" class="btn btn-success"> <span class="fa fa-check-circle"></span>  Reactivar </button>
+                            <button type="submit" ng-click="Limpiar();" class="btn btn-warning"> <span class="fa fa-plus"></span>   Nuevo</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

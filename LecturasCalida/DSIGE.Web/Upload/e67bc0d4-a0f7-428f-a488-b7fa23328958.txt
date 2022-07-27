@@ -1,0 +1,869 @@
+Lecturas_BureauVeritasReparto
+LecturasRepartoLds
+
+ 
+800 cuarto  domingo 10-04-2022
+1000 cuarto  domingo 22-05-2022
+1100 cuarto  domingo 29-05-2022
+1200 cuarto domingo 05-06-2022
+1300 cuarto domingo 19-06-2022
+ 
+
+delma debe 200 + 50   --- 30/06/2022 --- 
+
+
+
+http://70.37.52.217/GestionProyectosApplus/#  ---juan.gonzales@applus.com , 1234
+http://181.65.188.35/proyecto3r/#/  --- d ,123
+
+
+
+
+E:\Julio\Trabajo\fuentes_lecturas\Lecturas_Calidda\LecturasCalida\DSIGE.Web\Views\GeneracionActas
+ SP_S_ACTAS_LISTAR_NEW
+
+http://34.203.19.239/Industria/Reparto/Content/foto/foto/641602_1_03012022_0722272730.jpg
+
+517 837 810/lim-s-enel-per/adm.wendres   --- applus
+801956809/ocaglobal/administrador  ---- oca
+
+4 itf
+2 1/2 mas
+1 mas
+2 mas
+1 mas
+
+3500 -- por mes de trabajo ( 23 dias )
+152.16 - por cada dia de trbajo
+19.20 -- por cada hora de trabajo
+
+
+
+
+
+SELECT TOP 5 * FROM tbl_Reparto WHERE fechaAsignacion_Reparto ='02/01/2022'
+
+
+
+UPDATE dbo.tbl_Reparto
+SET ciclo_Reparto = 'C02 DICIEMBRE'
+WHERE fechaAsignacion_Reparto ='02/01/2022'
+
+
+
+Encontrar y ver contraseñas guardadas Windows 10, 8, 7
+ 
+
+http://localhost:61420/api/SeguimientoOrdenes?opcion=1&filtro=117,118,119,120|P|10|99
+
+
+ALTER  PROC DSIGE_PROY_W_SEGUIMIENTO_ORDENES_ENVIO_CORREO
+@idOTs varchar(max),
+@id_proyectista INT, 
+@id_usuario INT 
+AS
+BEGIN
+    DECLARE @numOt VARCHAR(250)
+	declare @T_ot table(
+		id int
+	)
+	insert into @T_ot select cadena from dbo.fnSplitArray(@idOTs)
+	
+    --SELECT a.numeroOT FROM tbl_OT a  INNER JOIN @T_ot b ON a.id_OT = b.id
+ 	SELECT @numOt = (STUFF( (SELECT ', ' + a.numeroOT FROM tbl_OT a  INNER JOIN @T_ot b ON a.id_OT = b.id FOR XML PATH ('')) , 1,2, ''))
+	
+	SELECT 
+	'gorelax.contacto@gmail.com' AS remitente,
+	'Go,123456' AS remitentePass,
+	'cesar.languasco@gmail.com' AS destinatario,
+	'juliocesar_4020@hotmail.com,cesar.languasco@gmail.com' AS copiaDestinatario,
+	'Alerta de Asignacion de proyectista' asunto,
+	'Se asigno al Proyectista JUAN MARTIN las siguientes OT ' + @numOt  AS cuerpoMensaje	
+END 
+
+
+ 
+ 
+ 
+ALTER  PROC DSIGE_PROY_W_REPORTES_EQUIPAMIENTO  
+@idformato INT,   
+@idUsuario INT   
+AS  
+BEGIN  
+
+	SELECT 
+	'HOJA DE EQUIPAMIENTO ' as tituloReporte,   
+	'OBRA DISTRIBUCION CENTRO' as seccion,  
+	abreviatura_TipoOT+'-'+numeroOT as td,  
+	c.nombreCliente_OT as cliente,     
+	alimentador as alimentador,  
+	modulo as modulo,   
+	sed as nroSed,   
+	ubicacion as direccion,  
+	c.id_distrito as distrito,  
+	ubicacion_Sed as ubicacion,  
+	'X' as  tipoSedConvencional,  
+	'' as  tipoSedAnivel,  
+	'X' as  tipoSedSubterranea,  
+	'' as  tipoSedCompacta,  
+	'' as  tipoSedPedestal,  
+	'' as  tipoSedBoveda,   
+	'' as  tipoSedAerea,  
+	'X' as  tipoSedMonoposte,  
+	'' as  tipoSedBiposte,  
+	'' as  tipoSedPmi,  
+	'' as  tipoSedRecloser,  
+	coordenaX AS cordenadaX,  
+	coordenaY AS cordenadaY,     
+	1 AS hojaReporte,  
+	1 AS grupoReporte,  
+	nroCelda as nroCelda,  
+	funcion as funcion,  
+	cliente as enlaceCliente,  
+	suminisrro as suministro,  
+	equipo as equipo,  
+	tipo_Fijo as tipoFijo,  
+	tipo_Extraib as tipoExtraib,  
+	subtipo as subtipo,    
+	kardex as kardex,  
+	nroFabrica as nroFabrica,  
+	marca as marca,  
+	modelo as modelo,  
+	inom as inom,  
+	mando as mando,  
+	rele as rele,  
+	irele as irele,  
+	tipo as tipo,  
+	'' as nroTrafo,  
+	'' as ubicacionCelda,  
+	'' as potInstKVA,  
+	'' as anio,  
+	'' as tapsNro,  
+	'' as tapsPosicion,  
+	'' as relTransV,  
+	'' as potenciaCC,  
+	'' as nroFases,  
+	'' as ternaNro1,  
+	'' as ternaNro2,  
+	'' as ternaNro3,    
+	'' as disyuntorMarca,   
+	'' as disyuntorKardex,    
+	'' as disyuntorSerie,  
+	'' as disyuntorIA,  
+	'' as tipoTableroSubterraneo,     
+	'' as tipoTableroAnivel,  
+	'' as llaveNro,  
+	'' as llaveTipo,  
+	'' as llaveBase,  
+	'' as llaveFusible,  
+	'' as llaveSeccion,  
+	'' as llaveObservacion,  
+	'' as tipoTableroAereo,  
+	'' as nroMedidor,  
+	'' as fotoCelula,  
+	'' as contactor,  
+	'' as intHorario       
+	from tbl_FormatoCab_MTBT c
+	inner join tbl_formato_HE123 d on (c.id_formato=d.id_formato)
+	inner join tbl_OT  ot on (c.id_ot=ot.id_ot)
+	inner join tbl_TipoOT tot on (ot.id_TipoOt=tot.id_TipoOt)  
+	WHERE id_TipoHoja=1 and c.id_formato=4
+
+
+
+UNION ALL   
+  	SELECT 
+	'HOJA DE EQUIPAMIENTO ' as tituloReporte,   
+	'OBRA DISTRIBUCION CENTRO' as seccion,  
+	abreviatura_TipoOT+'-'+numeroOT as td,  
+	c.nombreCliente_OT as cliente,     
+	alimentador as alimentador,  
+	modulo as modulo,   
+	sed as nroSed,   
+	ubicacion as direccion,  
+	c.id_distrito as distrito,  
+	ubicacion_Sed as ubicacion,  
+	'X' as  tipoSedConvencional,  
+	'' as  tipoSedAnivel,  
+	'X' as  tipoSedSubterranea,  
+	'' as  tipoSedCompacta,  
+	'' as  tipoSedPedestal,  
+	'' as  tipoSedBoveda,   
+	'' as  tipoSedAerea,  
+	'X' as  tipoSedMonoposte,  
+	'' as  tipoSedBiposte,  
+	'' as  tipoSedPmi,  
+	'' as  tipoSedRecloser,  
+	coordenaX AS cordenadaX,  
+	coordenaY AS cordenadaY,     
+	1 AS hojaReporte,  
+	2 AS grupoReporte,  
+	nroCelda as nroCelda,  
+	funcion as funcion,  
+	cliente as enlaceCliente,  
+	suminisrro as suministro,  
+	equipo as equipo,  
+	tipo_Fijo as tipoFijo,  
+	tipo_Extraib as tipoExtraib,  
+	subtipo as subtipo,    
+	kardex as kardex,  
+	nroFabrica as nroFabrica,  
+	marca as marca,  
+	modelo as modelo,  
+	inom as inom,  
+	mando as mando,  
+	rele as rele,  
+	irele as irele,  
+	tipo as tipo,  
+	'' as nroTrafo,  
+	'' as ubicacionCelda,  
+	'' as potInstKVA,  
+	'' as anio,  
+	'' as tapsNro,  
+	'' as tapsPosicion,  
+	'' as relTransV,  
+	'' as potenciaCC,  
+	'' as nroFases,  
+	'' as ternaNro1,  
+	'' as ternaNro2,  
+	'' as ternaNro3,    
+	'' as disyuntorMarca,   
+	'' as disyuntorKardex,    
+	'' as disyuntorSerie,  
+	'' as disyuntorIA,  
+	'' as tipoTableroSubterraneo,     
+	'' as tipoTableroAnivel,  
+	'' as llaveNro,  
+	'' as llaveTipo,  
+	'' as llaveBase,  
+	'' as llaveFusible,  
+	'' as llaveSeccion,  
+	'' as llaveObservacion,  
+	'' as tipoTableroAereo,  
+	'' as nroMedidor,  
+	'' as fotoCelula,  
+	'' as contactor,  
+	'' as intHorario       
+	from tbl_FormatoCab_MTBT c
+	inner join tbl_formato_HE123 d on (c.id_formato=d.id_formato)
+	inner join tbl_OT  ot on (c.id_ot=ot.id_ot)
+	inner join tbl_TipoOT tot on (ot.id_TipoOt=tot.id_TipoOt)  
+	WHERE id_TipoHoja=2 and c.id_formato=4
+ 
+  
+  
+  
+UNION ALL   
+  	SELECT 
+	'HOJA DE EQUIPAMIENTO ' as tituloReporte,   
+	'OBRA DISTRIBUCION CENTRO' as seccion,  
+	abreviatura_TipoOT+'-'+numeroOT as td,  
+	c.nombreCliente_OT as cliente,     
+	alimentador as alimentador,  
+	modulo as modulo,   
+	sed as nroSed,   
+	ubicacion as direccion,  
+	c.id_distrito as distrito,  
+	ubicacion_Sed as ubicacion,  
+	'X' as  tipoSedConvencional,  
+	'' as  tipoSedAnivel,  
+	'X' as  tipoSedSubterranea,  
+	'' as  tipoSedCompacta,  
+	'' as  tipoSedPedestal,  
+	'' as  tipoSedBoveda,   
+	'' as  tipoSedAerea,  
+	'X' as  tipoSedMonoposte,  
+	'' as  tipoSedBiposte,  
+	'' as  tipoSedPmi,  
+	'' as  tipoSedRecloser,  
+	coordenaX AS cordenadaX,  
+	coordenaY AS cordenadaY,     
+	1 AS hojaReporte,  
+	3 AS grupoReporte,  
+	nroCelda as nroCelda,  
+	funcion as funcion,  
+	cliente as enlaceCliente,  
+	suminisrro as suministro,  
+	equipo as equipo,  
+	tipo_Fijo as tipoFijo,  
+	tipo_Extraib as tipoExtraib,  
+	subtipo as subtipo,    
+	kardex as kardex,  
+	nroFabrica as nroFabrica,  
+	marca as marca,  
+	modelo as modelo,  
+	inom as inom,  
+	mando as mando,  
+	rele as rele,  
+	irele as irele,  
+	tipo as tipo,  
+	'' as nroTrafo,  
+	'' as ubicacionCelda,  
+	'' as potInstKVA,  
+	'' as anio,  
+	'' as tapsNro,  
+	'' as tapsPosicion,  
+	'' as relTransV,  
+	'' as potenciaCC,  
+	'' as nroFases,  
+	'' as ternaNro1,  
+	'' as ternaNro2,  
+	'' as ternaNro3,    
+	'' as disyuntorMarca,   
+	'' as disyuntorKardex,    
+	'' as disyuntorSerie,  
+	'' as disyuntorIA,  
+	'' as tipoTableroSubterraneo,     
+	'' as tipoTableroAnivel,  
+	'' as llaveNro,  
+	'' as llaveTipo,  
+	'' as llaveBase,  
+	'' as llaveFusible,  
+	'' as llaveSeccion,  
+	'' as llaveObservacion,  
+	'' as tipoTableroAereo,  
+	'' as nroMedidor,  
+	'' as fotoCelula,  
+	'' as contactor,  
+	'' as intHorario       
+	from tbl_FormatoCab_MTBT c
+	inner join tbl_formato_HE123 d on (c.id_formato=d.id_formato)
+	inner join tbl_OT  ot on (c.id_ot=ot.id_ot)
+	inner join tbl_TipoOT tot on (ot.id_TipoOt=tot.id_TipoOt)  
+	WHERE id_TipoHoja=3 and c.id_formato=4
+
+  
+  
+  
+UNION ALL   
+  
+SELECT 
+ 'HOJA DE EQUIPAMIENTO ' as tituloReporte,   
+ 'OBRA DISTRIBUCION CENTRO' as seccion,  
+ abreviatura_TipoOT+'-'+numeroOT as td,  
+ c.nombreCliente_OT  as cliente,  
+   
+ alimentador as alimentador,  
+ modulo as modulo,   
+ sed as nroSed,   
+  c.ubicacion as direccion,  
+ c.id_distrito as distrito,  
+ ubicacion_Sed as ubicacion,  
+   
+ 'X' as tipoSedConvencional,  
+ '' as  tipoSedAnivel,  
+ '' as  tipoSedSubterranea,  
+   
+ '' as  tipoSedCompacta,  
+ '' as  tipoSedPedestal,  
+ '' as  tipoSedBoveda,   
+   
+ '' as  tipoSedAerea,  
+ 'X' as  tipoSedMonoposte,  
+ '' as  tipoSedBiposte,  
+   
+ '' as  tipoSedPmi,  
+ '' as  tipoSedRecloser,  
+   
+ coordenaX AS cordenadaX,  
+ coordenaY AS cordenadaY,      
+   
+1 AS hojaReporte,   
+4 AS grupoReporte,  
+ '' as nroCelda,  
+ '' as funcion,  
+ '' as enlaceCliente,  
+ '' as suministro,  
+   
+ '' as equipo,  
+ '' as tipoFijo,  
+ '' as tipoExtraib,  
+ '' as subtipo,   
+ kardex as kardex,  
+ nroFabrica as nroFabrica,  
+ marca as marca,  
+ '' as modelo,  
+ '' as inom,  
+ '' as mando,  
+ '' as rele,  
+ '' as irele,  
+ tipo as tipo,  
+ nroTrafo as nroTrafo,  
+ d.ubicacion as ubicacionCelda,  
+ potInst as potInstKVA,  
+ anio as anio,  
+ '1' as tapsNro,  
+ posicion as tapsPosicion,  
+ relTransf as relTransV,  
+ potenciaCC as potenciaCC,  
+ nroFases as nroFases,  
+ cableC1 as ternaNro1,  
+ cableC2 as ternaNro2,  
+ cableC3 as ternaNro3,    
+ disMarca as disyuntorMarca,  
+ disKardex as disyuntorKardex,  
+ disSerie as disyuntorSerie,  
+ disIA as disyuntorIA,  
+ '' as tipoTableroSubterraneo,     
+ '' as tipoTableroAnivel,  
+ '' as llaveNro,  
+ '' as llaveTipo,  
+ '' as llaveBase,  
+ '' as llaveFusible,  
+ '' as llaveSeccion,  
+ '' as llaveObservacion,  
+ '' as tipoTableroAereo,  
+ '' as nroMedidor,  
+ '' as fotoCelula,  
+ '' as contactor,  
+ '' as intHorario   
+from tbl_FormatoCab_MTBT c
+inner join tbl_formato_HE4 d on (c.id_formato=d.id_formato)
+inner join tbl_OT  ot on (c.id_ot=ot.id_ot)
+inner join tbl_TipoOT tot on (ot.id_TipoOt=tot.id_TipoOt)  
+WHERE  c.id_formato=4
+
+
+  
+
+  
+  
+UNION ALL   
+  
+SELECT   
+ 'HOJA DE EQUIPAMIENTO ' as tituloReporte,   
+ 'OBRA DISTRIBUCION CENTRO' as seccion,  
+ abreviatura_TipoOT+'-'+numeroOT as td,  
+ c.nombreCliente_OT  as cliente,  
+   
+ alimentador as alimentador,  
+ modulo  as modulo,   
+ sed as nroSed,   
+ubicacion_Sed as direccion,  
+  c.id_distrito as distrito,  
+ ubicacion as ubicacion,  
+   
+ 'X' as tipoSedConvencional,  
+ '' as  tipoSedAnivel,  
+ '' as  tipoSedSubterranea,  
+   
+ '' as  tipoSedCompacta,  
+ '' as  tipoSedPedestal,  
+ '' as  tipoSedBoveda,   
+   
+ '' as  tipoSedAerea,  
+ 'X' as  tipoSedMonoposte,  
+ '' as  tipoSedBiposte,  
+   
+ '' as  tipoSedPmi,  
+ '' as  tipoSedRecloser,  
+   
+ coordenaX AS cordenadaX,  
+ coordenaY AS cordenadaY,      
+   
+1 AS hojaReporte,   
+5 AS grupoReporte,  
+ '' as nroCelda,  
+ '' as funcion,  
+ '' as enlaceCliente,  
+ '' as suministro,  
+   
+ '' as equipo,  
+ '' as tipoFijo,  
+ '' as tipoExtraib,  
+ '' as subtipo,   
+ '' as kardex,  
+ '' as nroFabrica,  
+ '' as marca,  
+ '' as modelo,  
+ '' as inom,  
+ '' as mando,  
+ '' as rele,  
+ '' as irele,  
+   
+ '' as tipo,  
+   
+ '' as nroTrafo,  
+ '' as ubicacionCelda,  
+ '' as potInstKVA,  
+ '' as anio,  
+ '' as tapsNro,  
+ '' as tapsPosicion,  
+ '' as relTransV,  
+ '' as potenciaCC,  
+ '' as nroFases,  
+ '' as ternaNro1,  
+ '' as ternaNro2,  
+ '' as ternaNro3,     
+ '' as disyuntorMarca,    
+ '' as disyuntorKardex,   
+ '' as disyuntorSerie,  
+ '' as disyuntorIA,  
+   
+ tipoTablero as tipoTableroSubterraneo,     
+ 'X' as tipoTableroAnivel,  
+ item as llaveNro,  
+ idtipo as llaveTipo,  
+ base as llaveBase,  
+ fusible as llaveFusible,  
+ seccion as llaveSeccion,  
+ observacion as llaveObservacion,  
+ 'X' as tipoTableroAereo,  
+ nroMedidor as nroMedidor,  
+ fotocelula as fotoCelula,  
+ contactor as contactor,  
+ intHorario as intHorario       
+from tbl_FormatoCab_MTBT c
+inner join tbl_formato_HE56 d on (c.id_formato=d.id_formato)
+inner join tbl_OT  ot on (c.id_ot=ot.id_ot)
+inner join tbl_TipoOT tot on (ot.id_TipoOt=tot.id_TipoOt)  
+WHERE  c.id_formato=4   and id_TipoHoja=5
+  
+ 
+  
+  
+UNION ALL   
+  
+SELECT   
+ 'HOJA DE EQUIPAMIENTO ' as tituloReporte,   
+ 'OBRA DISTRIBUCION CENTRO' as seccion,  
+ abreviatura_TipoOT+'-'+numeroOT as td,  
+ c.nombreCliente_OT  as cliente,  
+   
+ alimentador as alimentador,  
+ modulo  as modulo,   
+ sed as nroSed,   
+ubicacion_Sed as direccion,  
+  c.id_distrito as distrito,  
+ ubicacion as ubicacion,  
+   
+ 'X' as tipoSedConvencional,  
+ '' as  tipoSedAnivel,  
+ '' as  tipoSedSubterranea,  
+   
+ '' as  tipoSedCompacta,  
+ '' as  tipoSedPedestal,  
+ '' as  tipoSedBoveda,   
+   
+ '' as  tipoSedAerea,  
+ 'X' as  tipoSedMonoposte,  
+ '' as  tipoSedBiposte,  
+   
+ '' as  tipoSedPmi,  
+ '' as  tipoSedRecloser,  
+   
+ coordenaX AS cordenadaX,  
+ coordenaY AS cordenadaY,      
+   
+1 AS hojaReporte,   
+6 AS grupoReporte,  
+ '' as nroCelda,  
+ '' as funcion,  
+ '' as enlaceCliente,  
+ '' as suministro,  
+   
+ '' as equipo,  
+ '' as tipoFijo,  
+ '' as tipoExtraib,  
+ '' as subtipo,   
+ '' as kardex,  
+ '' as nroFabrica,  
+ '' as marca,  
+ '' as modelo,  
+ '' as inom,  
+ '' as mando,  
+ '' as rele,  
+ '' as irele,  
+   
+ '' as tipo,  
+   
+ '' as nroTrafo,  
+ '' as ubicacionCelda,  
+ '' as potInstKVA,  
+ '' as anio,  
+ '' as tapsNro,  
+ '' as tapsPosicion,  
+ '' as relTransV,  
+ '' as potenciaCC,  
+ '' as nroFases,  
+ '' as ternaNro1,  
+ '' as ternaNro2,  
+ '' as ternaNro3,     
+ '' as disyuntorMarca,    
+ '' as disyuntorKardex,   
+ '' as disyuntorSerie,  
+ '' as disyuntorIA,  
+   
+ tipoTablero as tipoTableroSubterraneo,     
+ 'X' as tipoTableroAnivel,  
+ item as llaveNro,  
+ idtipo as llaveTipo,  
+ base as llaveBase,  
+ fusible as llaveFusible,  
+ seccion as llaveSeccion,  
+ observacion as llaveObservacion,  
+ 'X' as tipoTableroAereo,  
+ nroMedidor as nroMedidor,  
+ fotocelula as fotoCelula,  
+ contactor as contactor,  
+ intHorario as intHorario       
+from tbl_FormatoCab_MTBT c
+inner join tbl_formato_HE56 d on (c.id_formato=d.id_formato)
+inner join tbl_OT  ot on (c.id_ot=ot.id_ot)
+inner join tbl_TipoOT tot on (ot.id_TipoOt=tot.id_TipoOt)  
+WHERE  c.id_formato=4   and id_TipoHoja=6
+  
+  
+   
+         
+        
+END
+GO
+
+ALTER  PROC DSIGE_PROY_W_REPORTES_POSTES_BT  
+@idformato INT,   
+@idUsuario INT   
+AS  
+BEGIN  
+  
+SELECT   
+'GESTIÓN DE DATOS TÉCNICOS' as tituloIzquierda,  
+'RELEVAMIENTO DE SOPORTES BT' as tituloReporte,  
+'OBRA DISTRIBUCION CENTRO' as seccion,  
+abreviatura_TipoOT+'-'+numeroOT as td,  
+c.nombreCliente_OT as cliente,  
+alimentador as alimentador,  
+modulo as modulo,  
+SED as nroSed,  
+Ubicacion_SED as ubicacion,  
+c.id_distrito as distrito,   
+codigoSoporte_frmDetMtBt as codCorrelativo,  
+codigoVia_frmDetBT as codigoVia,  
+llave_frmDetBT as llave,  
+sistemasBt_frmDetBT as sistemaBT,  
+armado_frmDetMtBt as armado,  
+Soporte_IdTipoMaterial_frmDetMtBt as materialSoporte,  
+soporte_Tamanio_frmDetMtBt as tamaño,  
+red_SDS_frmDetMtBt as redSp,  
+red_AP_frmDetMtBt as redAp,  
+red_Ambas_frmDetMtBt as redMt,  
+cajaDeriva_frmDetBT as cajaDerivada,  
+retenidaV_frmDetBT as retenidaV,  
+retenidaS_frmDetBT as retenidaS,  
+pastotalC_frmDetBT as pastoralC,  
+pastotalGF_frmDetBT as pastoralFG,  
+equipoTipo_frmDetBT as equipoTipo,  
+equipoModelo_frmDetBT as equipoModelo,  
+lampara_frmDetBT as lamparaTipo,  
+direccion_frmDetBT as direccion  ,c.id_OT 
+--select * 
+from tbl_FormatoCab_MTBT c
+inner join tbl_FormatoDet_MTBT d on (c.id_formato=d.id_formato)
+inner join tbl_OT  ot on (c.id_ot=ot.id_ot)
+inner join tbl_TipoOT tot on (ot.id_TipoOt=tot.id_TipoOt)  
+END
+GO
+
+ALTER   PROC DSIGE_PROY_W_REPORTES_POSTES_MT  
+@idformato INT,   
+@idUsuario INT   
+AS  
+BEGIN  
+  
+--- hojaReporte 1 = SOPORTE MT1, hojaReporte 2 = SOPORTE MT2, hojaReporte 3 = SOPORTE MT3 .......  
+  
+SELECT    
+   'GESTIÓN DE DATOS TÉCNICOS' as tituloIzquierda,  
+   'RELEVAMIENTO DE SOPORTES MT' as tituloReporte,  
+   'OBRA DISTRIBUCION CENTRO' as seccion,  
+   abreviatura_TipoOT+'-'+numeroOT as td,  
+   c.nombreCliente_OT  as cliente,  
+   c.id_distrito as distrito,  
+   alimentador as alimentador,  
+   modulo as modulo,  
+   SED as nroSed,  
+   ubicacion_Sed as ubicacion,  
+   codigoSoporte_frmDetMtBt as codigoSoporte,  
+   
+
+   alim_frmDetMT as alim,  
+   armado_frmDetMtBt as armado,  
+   Soporte_IdTipoMaterial_frmDetMtBt as soporteMaterial,  
+   soporte_Tamanio_frmDetMtBt as soporteTamanio,  
+   soporte_IdFuncion_frmDetMT as soporteFuncion,      
+   red_SDS_frmDetMtBt as redesSDS,  
+   red_AP_frmDetMtBt as redesAP,  
+   red_Ambas_frmDetMtBt as redesAmbas,      
+   secc_IdNumero_frmDetMT as seccionaNro,  
+   secc_Cod_frmDetMT  as seccionaCod,  
+   secc_Cap_frmDetMT as seccionaCap,  
+   secc_Fus_frmDetMT as seccionaFus,      
+   condu_IdTipoConductor_frmDetMT as conductorTipo,  
+   condu_LVano_frmDetMT as conductorL_vano,  
+   condu_Secc_frmDetMT as conductorSeccion,  
+   condu_Fases_frmDetMT as conductorFases,      
+   aisla_idTipoAislador_frmDetMT as aisladorTipo,  
+   aisla_Material_frmDetMT as aisladorMaterial,  
+   aisla_Cant_frmDetMT as aisladorCant,     
+   nViento_Violin_frmDetMT as vientosViolin,  
+   nViento_Simple_frmDetMT as vientosSimple,  
+   nViento_Cant_frmDetMT as vientosCant,   
+   pastoral_frmDetMT as pastoralSi,  
+   pastoral_frmDetMT as pastoralNo,  
+   observaciones_frmDetMtBt as observaciones,  
+   ot.id_TipoOT AS hojaReporte   
+          
+from tbl_FormatoCab_MTBT c
+inner join tbl_FormatoDet_MTBT d on (c.id_formato=d.id_formato)
+inner join tbl_OT  ot on (c.id_ot=ot.id_ot)
+inner join tbl_TipoOT tot on (ot.id_TipoOt=tot.id_TipoOt)  
+  
+END
+
+GO
+
+ALTER   PROC DSIGE_PROY_W_REPORTES_RETIRO_EQUIPO  
+@idformato INT,   
+@idUsuario INT   
+AS  
+BEGIN  
+SELECT 
+   'FORMATO DE RETIRO DE EQUIPO EXISTENTE' as tituloReporte,   
+   'OBRA DISTRIBUCION CENTRO' as seccion,  
+   abreviatura_TipoOT+'-'+numeroOT as td,  
+   c.nombreCliente_OT as cliente,  
+  
+   alimentador as alimentador,  
+   modulo as modulo,   
+   ubicacion_Sed as ubicacion,  
+   c.id_distrito as distrito,      
+   1 AS grupoReporte,  
+   nroKardex as  nroKardex,  
+   nroFabrica as  nroFabrica,  
+   sedUbicacion as  ubicacionSed,  
+   celdaUbicacion as  ubicacionCelda,  
+   potenciaKVA as  potencia,  
+   Destino  as  destino,  
+  Observacion as  observacion,      
+   funcionCelda as  funcionCelda,  
+   enlace as  enlace,      
+   equipo as  equipo,  
+   marca as  marca,  
+   tipo as  tipo,  
+   nroPrc as  ubicacionNroPCR,  
+  soporte AS  ubicacionSoporte  
+  --- select *
+from tbl_FormatoCab_MTBT c
+inner join tbl_Formato_RetiroEquipoExistente d on (c.id_formato=d.id_formato)
+inner join tbl_OT  ot on (c.id_ot=ot.id_ot)
+inner join tbl_TipoOT tot on (ot.id_TipoOt=tot.id_TipoOt)  
+where id_TipoFormato=4 AND id_tipoRetEquipo=1
+     
+     
+
+  
+UNION ALL   
+  
+SELECT 
+   'FORMATO DE RETIRO DE EQUIPO EXISTENTE' as tituloReporte,   
+   'OBRA DISTRIBUCION CENTRO' as seccion,  
+   abreviatura_TipoOT+'-'+numeroOT as td,  
+   c.nombreCliente_OT as cliente,  
+  
+   alimentador as alimentador,  
+   modulo as modulo,   
+   ubicacion_Sed as ubicacion,  
+   c.id_distrito as distrito,      
+   2 AS grupoReporte,  
+   nroKardex as  nroKardex,  
+   nroFabrica as  nroFabrica,  
+   sedUbicacion as  ubicacionSed,  
+   celdaUbicacion as  ubicacionCelda,  
+   potenciaKVA as  potencia,  
+   Destino  as  destino,  
+  Observacion as  observacion,      
+   funcionCelda as  funcionCelda,  
+   enlace as  enlace,      
+   equipo as  equipo,  
+   marca as  marca,  
+   tipo as  tipo,  
+   nroPrc as  ubicacionNroPCR,  
+  soporte AS  ubicacionSoporte  
+  --- select *
+from tbl_FormatoCab_MTBT c
+inner join tbl_Formato_RetiroEquipoExistente d on (c.id_formato=d.id_formato)
+inner join tbl_OT  ot on (c.id_ot=ot.id_ot)
+inner join tbl_TipoOT tot on (ot.id_TipoOt=tot.id_TipoOt)  
+where id_TipoFormato=4 AND id_tipoRetEquipo=2
+  
+UNION ALL   
+ SELECT 
+   'FORMATO DE RETIRO DE EQUIPO EXISTENTE' as tituloReporte,   
+   'OBRA DISTRIBUCION CENTRO' as seccion,  
+   abreviatura_TipoOT+'-'+numeroOT as td,  
+   c.nombreCliente_OT as cliente,  
+  
+   alimentador as alimentador,  
+   modulo as modulo,   
+   ubicacion_Sed as ubicacion,  
+   c.id_distrito as distrito,      
+   3 AS grupoReporte,  
+   nroKardex as  nroKardex,  
+   nroFabrica as  nroFabrica,  
+   sedUbicacion as  ubicacionSed,  
+   celdaUbicacion as  ubicacionCelda,  
+   potenciaKVA as  potencia,  
+   Destino  as  destino,  
+  Observacion as  observacion,      
+   funcionCelda as  funcionCelda,  
+   enlace as  enlace,      
+   equipo as  equipo,  
+   marca as  marca,  
+   tipo as  tipo,  
+   nroPrc as  ubicacionNroPCR,  
+  soporte AS  ubicacionSoporte  
+  --- select *
+from tbl_FormatoCab_MTBT c
+inner join tbl_Formato_RetiroEquipoExistente d on (c.id_formato=d.id_formato)
+inner join tbl_OT  ot on (c.id_ot=ot.id_ot)
+inner join tbl_TipoOT tot on (ot.id_TipoOt=tot.id_TipoOt)  
+where id_TipoFormato=4 AND id_tipoRetEquipo=3
+  
+UNION ALL   
+  
+SELECT 
+   'FORMATO DE RETIRO DE EQUIPO EXISTENTE' as tituloReporte,   
+   'OBRA DISTRIBUCION CENTRO' as seccion,  
+   abreviatura_TipoOT+'-'+numeroOT as td,  
+   c.nombreCliente_OT as cliente,  
+  
+   alimentador as alimentador,  
+   modulo as modulo,   
+   ubicacion_Sed as ubicacion,  
+   c.id_distrito as distrito,      
+   4 AS grupoReporte,  
+   nroKardex as  nroKardex,  
+   nroFabrica as  nroFabrica,  
+   sedUbicacion as  ubicacionSed,  
+   celdaUbicacion as  ubicacionCelda,  
+   potenciaKVA as  potencia,  
+   Destino  as  destino,  
+  Observacion as  observacion,      
+   funcionCelda as  funcionCelda,  
+   enlace as  enlace,      
+   equipo as  equipo,  
+   marca as  marca,  
+   tipo as  tipo,  
+   nroPrc as  ubicacionNroPCR,  
+  soporte AS  ubicacionSoporte  
+  --- select *
+from tbl_FormatoCab_MTBT c
+inner join tbl_Formato_RetiroEquipoExistente d on (c.id_formato=d.id_formato)
+inner join tbl_OT  ot on (c.id_ot=ot.id_ot)
+inner join tbl_TipoOT tot on (ot.id_TipoOt=tot.id_TipoOt)  
+where id_TipoFormato=4 AND id_tipoRetEquipo=4 
+         
+        
+END
+GO
+

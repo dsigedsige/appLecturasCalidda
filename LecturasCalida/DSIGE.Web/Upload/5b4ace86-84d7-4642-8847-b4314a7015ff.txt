@@ -1,0 +1,48 @@
+
+
+https://www.udemy.com/course/construyendo-web-apis-restful-con-aspnet-core/learn/lecture/29564332#overview
+
+http://localhost:59836/api/Pedidos?opcion=33&filtro=14|FC01-587|3912
+ 
+
+
+SELECT estado , id_Operario_Reparto , COUNT(*) FROM tbl_Reparto WHERE fechaAsignacion_Reparto = '14/11/2021' AND impresion_reparto = 'D' AND estado = 1 
+GROUP BY estado ,id_Operario_Reparto
+
+--- pendientes operario : 47
+
+SELECT * FROM TBL_Operarios WHERE id_Operario = 47 
+
+
+SELECT  
+  a.id_Reparto,
+  case when firmaCliente_CargoRecibo='' then '' else  'http://34.203.19.239/Industria/Reparto/Content/foto/foto/'+firmaCliente_CargoRecibo end AS ruta_foto             
+FROM tbl_Reparto a    
+ INNER JOIN Dsige_Movil_Calidda..tbl_Reparto_Registros b ON a.id_Reparto = b.id_reparto
+ INNER JOIN Dsige_Movil_Calidda..tbl_Cargo_Recibo c ON b.id_Registro = c.id_Registro   
+ AND a.fechaAsignacion_Reparto = '10/11/2021'
+ 
+
+1170
+1162
+
+
+
+SELECT  
+  a.id_Reparto,
+  case when firmaCliente_CargoRecibo='' then '' else  'http://34.203.19.239/Industria/Reparto/Content/foto/foto/'+firmaCliente_CargoRecibo end AS ruta_foto             
+FROM tbl_Reparto a    
+ INNER JOIN Dsige_Movil_Calidda..tbl_Reparto_Registros b ON a.id_Reparto = b.id_reparto
+ INNER JOIN Dsige_Movil_Calidda..tbl_Cargo_Recibo c ON b.id_Registro = c.id_Registro   
+ AND a.fechaAsignacion_Reparto = '10/11/2021'
+
+
+1097
+1097
+
+
+fecha Asignacion = '14/11/2021' 
+cargado : 1170, trabajado : 1162
+
+fecha Asignacion = '10/11/2021'
+cargado : 1097, trabajado : 1097

@@ -1,0 +1,320 @@
+ ALTER PROC SP_S_CHECK_LIST_FORMATO_1_PDF
+@idCheckList INT 
+AS
+BEGIN
+	
+	SELECT 
+	 'F-IND-P&U-001 ANÁLISIS DE TRABAJO SEGURO' AS tituloReporte,
+	 'ANÁLISIS DE TRABAJO SEGURO (ATS) CÓDIGO: F-IND-P&U-001 VERSIÓN: 03 FECHA: 09/02/2022' AS subTitulo,	 
+	'nroPregunta' = 1,
+	'titulo' ='Correo electrónico *',
+	'descripcion' = 'pepe_sanrafael@hotmail.com',
+	'valor' = '',
+	'esMarcar' = 0	 
+    UNION ALL 	
+	SELECT 
+	 'F-IND-P&U-001 ANÁLISIS DE TRABAJO SEGURO' AS tituloReporte,
+	 'ANÁLISIS DE TRABAJO SEGURO (ATS) CÓDIGO: F-IND-P&U-001 VERSIÓN: 03 FECHA: 09/02/2022' AS subTitulo,	 
+	'nroPregunta' = 2,
+	'titulo' ='APELLIDOS COMPLETOS *',
+	'descripcion' = 'ASTUCURI VILLEGAS',
+	'valor' = '',
+	'esMarcar' = 0	 
+    UNION ALL 
+	SELECT 
+	 'F-IND-P&U-001 ANÁLISIS DE TRABAJO SEGURO' AS tituloReporte,
+	 'ANÁLISIS DE TRABAJO SEGURO (ATS) CÓDIGO: F-IND-P&U-001 VERSIÓN: 03 FECHA: 09/02/2022' AS subTitulo,	 
+	'nroPregunta' = 3,
+	'titulo' ='NOMBRES COMPLETOS *',
+	'descripcion' = 'JOSÉ ANTONIO',
+	'valor' = '',
+	'esMarcar' = 0	 
+    UNION ALL  
+	SELECT 
+	 'F-IND-P&U-001 ANÁLISIS DE TRABAJO SEGURO' AS tituloReporte,
+	 'ANÁLISIS DE TRABAJO SEGURO (ATS) CÓDIGO: F-IND-P&U-001 VERSIÓN: 03 FECHA: 09/02/2022' AS subTitulo,	 
+	'nroPregunta' = 4,
+	'titulo' ='DOCUMENTOS DE IDENTIDAD*',
+	'descripcion' = 'DNI',
+	'valor' = '',
+	'esMarcar' = 0	 
+    UNION ALL 	
+	SELECT  
+	 'F-IND-P&U-001 ANÁLISIS DE TRABAJO SEGURO' AS tituloReporte,
+	 'ANÁLISIS DE TRABAJO SEGURO (ATS) CÓDIGO: F-IND-P&U-001 VERSIÓN: 03 FECHA: 09/02/2022' AS subTitulo,	 
+	'nroPregunta' = 5,
+	'titulo' ='PELIGROS GENERALES REFERENCIA IPER*',
+	'descripcion' = a.apellidos_usuario + ' ' + a.nombres_usuario  + a.apellidos_usuario + ' ' + a.nombres_usuario + a.apellidos_usuario + ' ' + a.nombres_usuario + a.apellidos_usuario + ' ' + a.nombres_usuario + a.email_usuario + a.apellidos_usuario + ' ' + a.nombres_usuario + a.apellidos_usuario + ' ' + a.nombres_usuario + a.email_usuario  ,
+	'valor' = CASE WHEN A.tipo_usuario = 'P' THEN 'SI' ELSE '' END ,
+	'esMarcar' = 1	 
+    FROM tbl_Usuarios a
+	    UNION ALL  
+	SELECT 
+	 'F-IND-P&U-001 ANÁLISIS DE TRABAJO SEGURO' AS tituloReporte,
+	 'ANÁLISIS DE TRABAJO SEGURO (ATS) CÓDIGO: F-IND-P&U-001 VERSIÓN: 03 FECHA: 09/02/2022' AS subTitulo,	 
+	'nroPregunta' = 6,
+	'titulo' ='OTROS PELIGROS PARTICULARES DE LA ACTIVIDAD (opcional)',
+	'descripcion' = 'agregar observacion',
+	'valor' = '',
+	'esMarcar' = 0
+		    UNION ALL  
+	SELECT 
+	 'F-IND-P&U-001 ANÁLISIS DE TRABAJO SEGURO' AS tituloReporte,
+	 'ANÁLISIS DE TRABAJO SEGURO (ATS) CÓDIGO: F-IND-P&U-001 VERSIÓN: 03 FECHA: 09/02/2022' AS subTitulo,	 
+	'nroPregunta' = 5,
+	'titulo' ='HE EVALUADO Y ANALIZADO LOS RIESGOS PRESENTES EN MI ÁREA DE TRABAJO, HACIENDO USO DE MI REGLAFUNDAMENTAL 2 MINUTOS POR MI SEGURIDAD  ',
+	'descripcion' = CASE WHEN A.tipo_usuario = 'P' THEN 'SI' ELSE 'NO' END,
+	'valor' = CASE WHEN A.tipo_usuario = 'P' THEN ' X' ELSE '' END ,
+	'esMarcar' = 1	 
+    FROM tbl_Usuarios a	WHERE a.id_Usuario IN (41,42)
+	
+	
+END
+GO
+
+
+ 
+ 
+ 
+ALTER PROC SP_S_CHECK_LIST_FORMATO_2_PDF
+@idCheckList INT 
+AS
+BEGIN
+	
+	SELECT 
+	 'F-IND-CAL-001 INSPECCIÓN DIARIA DE EPP, EQUIPOS Y HERRAMIENTAS' AS tituloReporte,
+	 'CÓDIGO: F-IND-CAL-001 VERSIÓN: 02 FECHA: 09/02/2022' AS subTitulo,	 
+	'nroPregunta' = 1,
+	'titulo' ='Correo Electronico',
+	'subtitulo1' = '',
+	'subtitulo2' = '',
+	'subtitulo3' = '',
+	'descripcion' = 'Pepe_sanrafael@hotmail.com',
+	'valor' = '',
+	'valor2' = '',
+	'valor3' = '',
+	'esMarcar' = 0,
+	'esOpcion' = 0 	 
+    UNION ALL 	
+	SELECT 
+	 'F-IND-CAL-001 INSPECCIÓN DIARIA DE EPP, EQUIPOS Y HERRAMIENTAS' AS tituloReporte,
+	 'CÓDIGO: F-IND-CAL-001 VERSIÓN: 02 FECHA: 09/02/2022' AS subTitulo,	 
+	'nroPregunta' = 2,
+	'titulo' ='APELLIDOS COMPLETOS',
+	'subtitulo1' = '',
+	'subtitulo2' = '',
+	'subtitulo3' = '',
+	'descripcion' = 'ASTUCURI VILLEGAS',
+	'valor' = '',
+	'valor2' = '',
+	'valor3' = '',
+	'esMarcar' = 0,
+	'esOpcion' = 0 
+	
+    UNION ALL 
+ 
+	SELECT TOP 10 
+	 'F-IND-CAL-001 INSPECCIÓN DIARIA DE EPP, EQUIPOS Y HERRAMIENTAS' AS tituloReporte,
+	 'CÓDIGO: F-IND-CAL-001 VERSIÓN: 02 FECHA: 09/02/2022' AS subTitulo,	
+	'nroPregunta' = 3,
+	'titulo' ='PARTE I: UNIFORME Y EPP',
+	'subtitulo1' = 'SI',
+	'subtitulo2' = 'NO',
+	'subtitulo3' = 'NA',
+	'descripcion' = a.apellidos_usuario + ' ' + a.nombres_usuario ,
+	'valor' = 'X',
+	'valor2' = 'X',
+	'valor3' = 'X',
+	'esMarcar' = 0,
+	'esOpcion' = 1	
+	FROM tbl_Usuarios a
+	
+	    UNION ALL 	
+	    
+   SELECT 
+	 'F-IND-CAL-001 INSPECCIÓN DIARIA DE EPP, EQUIPOS Y HERRAMIENTAS' AS tituloReporte,
+	 'CÓDIGO: F-IND-CAL-001 VERSIÓN: 02 FECHA: 09/02/2022' AS subTitulo,	 
+	'nroPregunta' = 4,
+	'titulo' ='APELLIDOS COMPLETOS',
+	'subtitulo1' = '',
+	'subtitulo2' = '',
+	'subtitulo3' = '',
+	'descripcion' = 'ASTUCURI VILLEGAS',
+	'valor' = '',
+	'valor2' = '',
+	'valor3' = '',
+	'esMarcar' = 0,
+	'esOpcion' = 0 
+ 
+	
+	UNION ALL  
+	
+	 SELECT  TOP 10 
+	 'F-IND-CAL-001 INSPECCIÓN DIARIA DE EPP, EQUIPOS Y HERRAMIENTAS' AS tituloReporte,
+	 'CÓDIGO: F-IND-CAL-001 VERSIÓN: 02 FECHA: 09/02/2022' AS subTitulo,	 
+	'nroPregunta' = 5,	
+	'titulo' ='PELIGROS GENERALES REFERENCIA IPER*',
+	'subtitulo1' = '',
+	'subtitulo2' = '',
+	'subtitulo3' = '',
+    'descripcion' = a.apellidos_usuario + ' ' + a.nombres_usuario  + a.apellidos_usuario , 
+	'valor' = CASE WHEN A.tipo_usuario = 'P' THEN 'SI' ELSE '' END ,
+	'valor2' = '',
+	'valor3' = '',
+	'esMarcar' = 1,
+	'esOpcion' = 0		 
+    FROM tbl_Usuarios a
+    
+	UNION ALL 
+	
+	SELECT TOP 5 
+	 'F-IND-CAL-001 INSPECCIÓN DIARIA DE EPP, EQUIPOS Y HERRAMIENTAS' AS tituloReporte,
+	 'CÓDIGO: F-IND-CAL-001 VERSIÓN: 02 FECHA: 09/02/2022' AS subTitulo,	
+	'nroPregunta' = 3,
+	'titulo' ='PARTE I: UNIFORME Y EPP',
+	'subtitulo1' = 'CONFORME',
+	'subtitulo2' = 'NO CONFORME',
+	'subtitulo3' = 'NO APLICA',
+	'descripcion' = a.apellidos_usuario + ' ' + a.nombres_usuario  + ' ' + a.apellidos_usuario + ' ' + a.nombres_usuario,
+	'valor' = 'X',
+	'valor2' = '',
+	'valor3' = '',
+	'esMarcar' = 0,
+	'esOpcion' = 1	
+	FROM tbl_Usuarios a	 
+	
+	
+END
+GO
+
+
+ 
+----   SP_S_CHECK_LIST_FORMATO_3_PDF 2
+ 
+CREATE   PROC SP_S_CHECK_LIST_FORMATO_3_PDF
+@idCheckList INT 
+AS
+BEGIN
+	
+	SELECT 
+	 'F - 057Check List de Conducción Segura' AS tituloReporte,
+	 'CODIGO: F-057 VERSION: 09 FECHA: 14/01/2021' AS subTitulo,	 
+	'nroPregunta' = 1,
+	'titulo' ='Correo Electronico',
+	'subtitulo1' = '',
+	'subtitulo2' = '',
+	'subtitulo3' = '',
+	'subtitulo4' = '',
+	'descripcion' = 'Pepe_sanrafael@hotmail.com',
+	'valor' = '',
+	'valor2' = '',
+	'valor3' = '',
+	'valor4' = '',	
+	'esMarcar' = 0,
+	'esOpcion' = 0 	 
+    UNION ALL 	
+	SELECT 
+	 'F - 057Check List de Conducción Segura' AS tituloReporte,
+	 'CODIGO: F-057 VERSION: 09 FECHA: 14/01/2021' AS subTitulo,	 
+	'nroPregunta' = 2,
+	'titulo' ='APELLIDOS COMPLETOS',
+	'subtitulo1' = '',
+	'subtitulo2' = '',
+	'subtitulo3' = '',
+	'subtitulo4' = '',
+	'descripcion' = 'ASTUCURI VILLEGAS',
+	'valor' = '',
+	'valor2' = '',
+	'valor3' = '',
+		'valor4' = '',	
+	'esMarcar' = 0,
+	'esOpcion' = 0 
+	
+    UNION ALL 
+ 
+	SELECT TOP 9 
+	 'F - 057Check List de Conducción Segura' AS tituloReporte,
+	 'CODIGO: F-057 VERSION: 09 FECHA: 14/01/2021' AS subTitulo,	
+	'nroPregunta' = 3,
+	'titulo' ='PARTE I: UNIFORME Y EPP',
+	'subtitulo1' = 'SI',
+	'subtitulo2' = 'NO',
+	'subtitulo3' = 'NA',
+	'subtitulo4' = 'Puntuación',
+	'descripcion' = a.apellidos_usuario + ' ' + a.nombres_usuario ,
+	'valor' = 'X',
+	'valor2' = 'X',
+	'valor3' = 'X',
+	'valor4' = '',	
+	'esMarcar' = 0,
+	'esOpcion' = 1	
+	FROM tbl_Usuarios a
+	
+	    UNION ALL 	
+	    
+   SELECT 
+	 'F - 057Check List de Conducción Segura' AS tituloReporte,
+	 'CODIGO: F-057 VERSION: 09 FECHA: 14/01/2021' AS subTitulo,	 
+	'nroPregunta' = 4,
+	'titulo' ='APELLIDOS COMPLETOS',
+	'subtitulo1' = '',
+	'subtitulo2' = '',
+	'subtitulo3' = '',
+	'subtitulo4' = '',
+	'descripcion' = 'ASTUCURI VILLEGAS',
+	'valor' = '',
+	'valor2' = '',
+	'valor3' = '',
+	'valor4' = '',		
+	'esMarcar' = 0,
+	'esOpcion' = 0 
+ 
+	
+	UNION ALL  
+	
+	 SELECT  TOP 10 
+	 'F - 057Check List de Conducción Segura' AS tituloReporte,
+	 'CODIGO: F-057 VERSION: 09 FECHA: 14/01/2021' AS subTitulo,	 
+	'nroPregunta' = 5,	
+	'titulo' ='PELIGROS GENERALES REFERENCIA IPER*',
+	'subtitulo1' = '',
+	'subtitulo2' = '',
+	'subtitulo3' = '',
+    'subtitulo4' = '',	
+    'descripcion' = a.apellidos_usuario + ' ' + a.nombres_usuario  + a.apellidos_usuario , 
+	'valor' = CASE WHEN A.tipo_usuario = 'P' THEN 'SI' ELSE '' END ,
+	'valor2' = '',
+	'valor3' = '',
+	'valor4' = '',		
+	'esMarcar' = 1,
+	'esOpcion' = 0		 
+    FROM tbl_Usuarios a
+    
+	UNION ALL 
+	
+	SELECT TOP 5 
+	 'F - 057Check List de Conducción Segura' AS tituloReporte,
+	 'CODIGO: F-057 VERSION: 09 FECHA: 14/01/2021' AS subTitulo,	
+	'nroPregunta' = 3,
+	'titulo' ='PARTE I: UNIFORME Y EPP',
+	'subtitulo1' = 'SI',
+	'subtitulo2' = 'NO',
+	'subtitulo3' = 'NA',
+	'subtitulo4' = 'Puntuación',
+	'descripcion' = a.apellidos_usuario + ' ' + a.nombres_usuario  + ' ' + a.apellidos_usuario + ' ' + a.nombres_usuario,
+	'valor' = 'X',
+	'valor2' = '',
+	'valor3' = '',
+	'valor4' = '',		
+	'esMarcar' = 0,
+	'esOpcion' = 1	
+	FROM tbl_Usuarios a	 
+	
+	
+END
+GO
+
+
+ 
+
+

@@ -1,0 +1,724 @@
+https://www.zonarutoppuden.com/2016/05/naruto-shippuden-463.html
+https://www.facebook.com/watch/?v=688282991852891
+
+wooden colorful rainbow hand
+
+-- Para publicar multiples
+173.248.174.16:2978
+Administrator
+Gg@fgb566gbn
+
+
+VERITAS,  QUAVI
+- escritorio remoto
+34.203.19.239
+Administrator  
+P@s21\0123746872
+
+
+
+www.hydroglobal-peru.com   / http://173.248.174.84/ventas AREQUIPA ---
+173.248.174.59:2978
+Administrator
+YSthrHt#8QR5cM8C
+
+
+
+GESTION DE ARCHIVOS
+173.248.174.59:2978
+Administrator
+YSthrHt#8QR5cM8C
+
+SISTEMA ITF
+ip publica: 92.204.134.45
+usuario: sistemas
+password: S1stem@s1Tf
+
+
+
+DOMINION 3R VPN  
+usaurio: dsige
+password: Dominion123@
+
+ESCRITORIO REMOTO
+192.168.10.249
+Administrador
+1Dominion$
+
+
+--cadena de conexion dominion
+192.168.10.249
+UserP3R
+Dominion,123
+
+ 
+
+
+any desk OCA
+
+http://190.12.90.249/OCA
+
+227118370
+Sintec2020
+
+Oca pagina usuario Proveedor
+Usuario: 20101164901
+Contraseña: tq1nyjwjfubufcwb8np9a
+
+
+70.37.52.217 ApPlus
+173.248.174.33:2978 ese de dsige
+173.248.174.85:2978 Pert
+
+
+
+www.dominion-peru.com/calidda
+
+IP del Acceso Remoto para la publicacion
+173.248.174.31:2978
+Administrator
+Gg#vf2$0415
+
+Base Datos  www.dominion-peru.com/calidda
+173.248.174.75:2978
+Administrator
+gT#sEr2t3Xa
+
+
+CREAR PROCEDIMIENTOS CON  TRANSACCIONES 
+ 
+  PROC [dbo].[SP_GUARDAR_TRANSFERENCIA]
+@ID_ALMTRANCAB INT,
+@FECHAEMISION_TRANFERENCIACAB DATETIME,
+@ORIGEN_ID_LOCAL INT,
+@ORIGEN_ID_ALMACEN INT,
+@DESTINO_ID_LOCAL INT,
+@DESTINO_ID_ALMACEN INT,
+@OBS_TRANFERENCIACAB VARCHAR(200),
+@USUARIO_CREACION INT
+AS
+BEGIN
+  BEGIN TRANSACTION;
+	BEGIN TRY
+      
+        ---- cuerpo del procedimientos **-----
+		
+		COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		 EXECUTE usp_GetErrorInfo;
+		 ROLLBACK TRANSACTION;
+	END CATCH;
+	
+END
+GO
+
+
+
+
+REPORTE DINAMICO POR FECHAS 
+
+WEB APPLUS MODULO REPORTES --
+
+
+ ALTER   PROC  DSIGE_PROY_W_REPORTES_RESUMEN_OT_GROUP_MESANIO
+@anio_ini AS INT,
+@mes_ini AS INT,
+@anio_fin AS INT,
+@mes_fin AS INT
+AS
+BEGIN 
+	SELECT DISTINCT  month(fecha_edicion) AS mes, 
+	        year(fecha_edicion) AS anio,   
+	        DateName(month,fecha_edicion) + '-' +DateName(year,fecha_edicion) AS mesAnio
+	FROM tbl_Usuarios 
+ 
+END
+GO
+
+
+
+
+ALTER  PROC  DSIGE_PROY_W_REPORTES_RESUMEN_OT_GROUP_ESTADOS
+@anio_ini AS INT,
+@mes_ini AS INT,
+@anio_fin AS INT,
+@mes_fin AS INT
+AS
+BEGIN 
+	SELECT a.id_Usuario AS idEstados, 
+		   a.apellidos_usuario  + ' ' + a.nombres_usuario AS estados,
+		   a.id_Perfil AS idOT ,
+		   b.descripcion_perfil AS tipoOT		   
+	FROM tbl_Usuarios a
+	INNER JOIN tbl_Perfil b ON b.id_perfil = a.id_Perfil 
+	GROUP BY a.id_Usuario , a.apellidos_usuario  + ' ' + a.nombres_usuario ,  a.id_Perfil,  b.descripcion_perfil
+END
+GO
+
+ALTER   PROC  DSIGE_PROY_W_REPORTES_RESUMEN_OT_ESTADOS_DETAIL
+@anio_ini AS INT,
+@mes_ini AS INT,
+@anio_fin AS INT,
+@mes_fin AS INT
+ 
+AS
+BEGIN 
+ 
+	SELECT a.id_Usuario AS idEstados, 
+			a.id_Perfil AS idOT, 
+			month(a.fecha_edicion) AS mes, 
+			year(a.fecha_edicion) AS anio,
+		   a.id_Usuario * FLOOR(RAND()*(99-1)+1) AS valorCantidad,
+		   a.id_Usuario * FLOOR(RAND()*(99-1)+1) AS valorSoles
+	FROM tbl_Usuarios a
+	
+END
+GO
+
+
+
+
+
+
+
+
+
+
+ALTER  PROC DSIGE_PROY_W_SEGUIMIENTO_ORDENES_ENVIO_CORREO
+@idOTs varchar(500),
+@id_proyectista INT, 
+@id_usuario INT 
+AS
+BEGIN
+
+    DECLARE @numOt VARCHAR(250)
+	declare @T_ot table(
+		id int
+	)
+	insert into @T_ot select cadena from dbo.fnSplitArray(@idOTs)
+ 
+    --SELECT a.numeroOT FROM tbl_OT a  INNER JOIN @T_ot b ON a.id_OT = b.id
+ 	SELECT @numOt =(STUFF( (SELECT ', ' + a.numeroOT FROM tbl_OT a  INNER JOIN @T_ot b ON a.id_OT = b.id FOR XML PATH ('')) , 1,2, ''))
+	
+	SELECT 
+	'gorelax.contacto@gmail.com' AS remitente,
+	'Go,123456' AS remitentePass,
+	'cesar.languasco@gmail.com' AS destinatario,
+	'juliocesar_4020@hotmail.com ; cesar.languasco@gmail.com' AS copiaDestinatario,
+	'Alerta de Asignacion de proyectista' asunto,
+	'<html>
+	  <body>
+		  <p>Estimado David Arroyo,</p>
+		  <p>Se asigno al Proyectista <b>JUAN MARTIN<b> las siguientes OT ' + @numOt  + '</p>
+		  <p>Atte,<br>- Julio Cesar</br></p>
+	  </body>
+	</html> ' AS  cuerpoMensaje
+ 
+END 
+
+
+   ------ SCROLL WEB
+
+------VISTA----
+
+    @*<h2>Infinity scroll in AngularJS</h2>
+    <div style="position:relative">
+            <span ng-show="Isloading" class="loading">Loading...</span>
+            <div infinitescroll="Nextpage()" style="height:400px; overflow:auto;">
+                <table class="table table-responsive table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Delegacion</th>
+                            <th>Personal</th>
+                            <th>Nro.Documento</th>
+                            <th>Cargo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in List_Personal2">
+                            <td style="width:20% !important;">{{item.nombre_delegacion}}</td>
+                            <td style="width:20% !important;">{{item.apellidos_Personal}} {{item.nombres_Personal}}</td>
+                            <td style="width:10%; text-align:center">{{item.nroDoc_Personal}}</td>
+                            <td style="width:20%;">{{item.nombre_cargo}}</td>
+                        </tr>
+                    </tbody> 
+                </table>
+            </div>
+        </div>*@ 
+
+
+----CONTROLLER
+
+
+    $scope.currentpage = 1;
+    $scope.totalpage = 0;
+    $scope.detailslist = [];
+    
+    function getdata(page) {
+
+        alert('entrandopo')
+
+        $scope.Isloading = true; 
+        document.getElementById("form_cabecera").style.display = "none";
+        $scope.showLoaderSave = true;
+        serPersonal.getPersonal_empresa_delegacion_proyecto_new($scope.Objeto_Parametro_Filtro)
+            .then(function (data) {
+
+                console.log(data)
+                 
+                if (data.length == 0) {
+                    $scope.showLoaderSave = false;
+                    document.getElementById("form_cabecera").style.display = "";
+                }
+                $scope.List_Personal2 = [];
+                $scope.List_Personal2 = data;
+
+                $scope.totalpage = data.length;
+                $scope.Isloading = false;
+            });
+
+    }
+       
+
+    $scope.Nextpage = function () {
+        if ($scope.currentpage < $scope.totalpage) {
+            $scope.currentpage += 1;
+            getdata($scope.currentpage);
+        }
+    };
+
+
+
+----DIRECTIVA----
+
+app.directive('infinitescroll', function () {
+    alert('entroo infinitescroll')
+    return {
+        restrict: 'A',
+        link: function (scope, element, attrs) {
+            element.bind('scroll', function () {
+                if ((element[0].scrollTop + element[0].offsetHeight) == element[0].scrollHeight) {
+                    scope.$apply(attrs.infinitescroll);
+                }
+            })
+        }
+    }
+});
+
+
+
+----- SQL
+
+ALTER  proc Sp_Get_data
+@Pageindex int,
+@Pagesize int
+as
+begin
+	Select * from tbl_Alm_Producto order BY id_Producto  asc Offset @Pagesize*(@Pageindex-1) Rows Fetch next @Pagesize rows only
+	Select Count(id_Producto) as totalcount from tbl_Alm_Producto
+
+end
+
+
+
+
+
+
+// ASISTENCIAS CAM, ACTUALIZACION MANUAL DE LOS REGISTROS 
+
+
+SP_I_ASISTENCIACAMPO_MIGRAR_ASISTENCIA_ULTIMO
+
+
+//fusionChart
+
+    $scope.myDataSource;
+    var Mydatasource;
+    var Mychart;
+    var Mydata = [];
+
+                Mychart = {
+                    caption: "Harry's SuperMart",
+                    subCaption: "Top 5 stores in last month by revenue",
+                    numberPrefix: "$",
+                    theme: "ocean",
+                    exportEnabled: "1",
+                };
+
+
+           Mydata = [];
+           for (var i = 0; i < res.length; i++) {
+                   Mydata.push({
+                       label: res[i].fecha_aprobacion,
+                       value: res[i].id_Alm_Solicitud_Cab
+                   });
+           }
+           Mydatasource = {
+               chart: Mychart,
+               data: Mydata
+           };
+
+           $scope.myDataSource = [];
+           $scope.myDataSource = Mydatasource;
+
+        @*<fusioncharts width="600"
+                      height="400"
+                      type="pie3d"
+                      datasource="{{myDataSource}}">
+        </fusioncharts>*@
+
+        <div fusioncharts
+             width="1000"
+             height="400"
+             type="column2d"
+             datasource="{{myDataSource}}"></div>
+
+
+
+
+10414110415
+
+////------- galeria de imagenes con angularJs
+
+
+//-----repetidas en Luz del sur
+
+SP_S_REPORTE_LECTURA_FOTOS
+
+SELECT suministro, count(*)   FROM CESAR
+GROUP BY suministro
+HAVING count(*) > 1 
+
+SELECT id_LecturaFoto , id_Lectura , fotourl  FROM TBL_Lectura_Fotos WHERE id_Lectura IN (SELECT id_lectura FROM CESAR WHERE suministro IN ( SELECT * FROM T_DATA_REP))
+ORDER BY id_Lectura
+ 
+
+
+ 
+// ng-repeat Dinamico   angularjs ng-repeat dynamic columns
+
+<table border="1" ng-repeat="table in tables">
+  <tr>
+      <th ng-repeat="column in table.cols">{{column}}</th>
+  </tr>
+  <tr ng-repeat="row in table.rows">
+    <td ng-repeat="column in table.cols">{{row[column]}}</td>
+  </tr>
+</table>
+En el controlador:
+
+function MyCtrl($scope, $http) {
+    $scope.index = 0;
+    $scope.tables = [];
+    $scope.loadNew = function() {
+        $http.get(/*url*/).success(function(result) {
+            $scope.tables.push({rows: result, cols: Object.keys(result)});
+        });
+        $scope.index++;
+    }
+}
+
+
+---controlador---
+            $scope.Obj_List_Servicios = [];
+            $scope.Listado_Servicios = function () {
+                var variables = {
+                    method: 'POST',
+                    url: '../Importar_ArchivoTXT/ListandoServicios',
+                    headers: {
+                        'Content-Type': 'application/json; charset=utf-8'
+                    }
+                }
+                $http(variables)
+                .success(function (data) {
+                    $scope.rows = []
+                    $scope.rows = data;
+                    $scope.cols = Object.keys($scope.rows[0]);
+                })
+
+                .error(function () {
+                    alert('Ocurrio un problema con la conexion, vuelva a intentar.')
+
+                });
+            }
+---Vista general---
+
+                <table border="1">
+                    <tr>
+                        <th ng-repeat="column in cols">{{column}}</th>
+                    </tr>
+                    <tr ng-repeat="row in rows">
+                        <td ng-repeat="column in cols">{{row[column]}}</td>
+                    </tr>
+                </table>
+
+
+
+
+
+https://www.youtube.com/watch?v=4Cv1MbulEDg
+
+
+MAPAS --- 
+CALIDDA UBICACION DE LECTURAS
+CONTROL ASISTENCIA --ASISTENCIA CAMPO
+
+// llamando a la funcion WebApi
+
+       $('#modal-registro').modal('show');
+
+
+
+ var url = 'api/UploadFiles?usuario=1&cliente=1&local=1&servicio=1&fechaAsignacion=04/11/2016';
+    var parameters = {
+        usuario: 1,
+        cliente: 1,
+        local: 1,
+        servicio: 1,
+        fechaAsignacion: "04/11/2016"
+    }
+    $http.post(url)
+    .success(function () {
+
+    })
+    .error(function () {
+
+    })
+
+
+
+// LLamando eliminar el metodo Delete 
+
+    var url = 'api/RecepcionLiquidacionesOT';
+    var parametros = 1
+    parameters = {
+        opcion: 1,
+        filtro: parametros
+    }
+    $http({
+        method: 'delete',
+        url: url,
+        params: parameters
+    })
+    .success(function (result, obj) {
+
+    })
+    .error(function (err) {
+
+    })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        function SoloNumerosDecimales3(e, valInicial, nEntero, nDecimal) {
+            var obj = e.srcElement || e.target;
+            var tecla_codigo = (document.all) ? e.keyCode : e.which;
+            var tecla_valor = String.fromCharCode(tecla_codigo);
+            var patron2 = /[\d.]/;
+            var control = (tecla_codigo === 46 && (/[.]/).test(obj.value)) ? false : true;
+            var existePto = (/[.]/).test(obj.value);
+
+            //el tab
+            if (tecla_codigo === 8)
+                return true;
+
+            if (valInicial !== obj.value) {
+                var TControl = obj.value.length;
+                if (existePto === false && tecla_codigo !== 46) {
+                    if (TControl === nEntero) {
+                        obj.value = obj.value + ".";
+                    }
+                }
+
+                if (existePto === true) {
+                    var subVal = obj.value.substring(obj.value.indexOf(".") + 1, obj.value.length);
+
+                    if (subVal.length > 1) {
+                        return false;
+                    }
+                }
+
+                return patron2.test(tecla_valor) && control;
+            }
+            else {
+                if (valInicial === obj.value) {
+                    obj.value = '';
+                }
+                return patron2.test(tecla_valor) && control;
+            }
+        }
+
+
+http://localhost:50096/api/ProgramacionObras?opcion=8&id_local=0&id_area=0&id_estado=4&fecha_ini=01/01/2016&fecha_fin=05/01/2016&tipoFecha=1&filtro=77/100
+
+
+
+ALTER PROCEDURE  SP_S_LISTAR_ORDEN_TRABAJO
+
+@cuadrilla INT ,
+@personal INT ,
+@servicio INT ,
+@estado INT ,
+@local INT ,
+@fechaAsignacion VARCHAR(10)
+AS
+BEGIN 
+
+  DECLARE @cuad AS VARCHAR(10)  
+  DECLARE @per AS VARCHAR(10)  
+  DECLARE @serv AS VARCHAR(10) 
+  DECLARE @est AS VARCHAR(10) 
+  DECLARE @loc AS VARCHAR(10)   
+       
+	SET @serv=''  
+	SET @per='' 
+	SET @cuad='' 
+	SET @est='' 	
+	SET @loc=''	
+  
+  SET @serv= convert(VARCHAR(10),@servicio)     
+  SET @cuad= convert(VARCHAR(10),@cuadrilla)   
+  SET @per= convert(VARCHAR(10),@personal)   
+  SET @est= convert(VARCHAR(10),@estado)  
+  SET @loc= convert(VARCHAR(10),@local)   
+      
+  IF @servicio= 0  
+    BEGIN  
+     SET @serv=''  
+    END   
+      
+  IF @cuadrilla= 0  
+    BEGIN  
+     SET @cuad=''  
+    END
+    
+  IF @personal= 0  
+    BEGIN  
+     SET @per=''  
+    END    
+
+  IF @estado= 0  
+    BEGIN  
+     SET @est=''  
+    END   
+    
+  IF @local= 0  
+    BEGIN  
+     SET @loc=''  
+    END   
+    
+  SELECT 
+		O.id_cliente,
+		O.trabajoDescripcion_ordenTrabajo,
+		O.estado,
+		O.id_cuadrilla,
+		O.id_personal,
+		O.id_servicio,
+		P.nombres_personal,
+		CU.nombre_cuadrilla	
+   FROM tbl_OrdenesTrabajo O 
+	 INNER JOIN tbl_Servicios  S ON S.id_servicio = O.id_servicio
+	 INNER JOIN tbl_Clientes C ON O.id_cliente = C.id_cliente
+	 INNER JOIN tbl_Cuadrillas CU ON O.id_cuadrilla=CU.id_cuadrilla
+	 INNER JOIN tbl_Personal P ON O.id_personal= P.id_personal
+	 WHERE   CAST(O.id_cuadrilla AS VARCHAR(10)) like '%'+@cuad+'' 
+			AND CAST(O.id_personal AS VARCHAR(10)) like '%'+@per+'' 
+			AND CAST(O.id_servicio AS VARCHAR(10)) like '%'+@serv+'' 
+			AND CAST(O.estado AS VARCHAR(10)) like '%'+@est+'' 
+			AND CAST(O.id_local AS VARCHAR(10)) like '%'+@loc+'' 
+	 		AND COnvert(VARCHAR(10),O.fechaAsignacion_ordenTrabajo,103)=@fechaAsignacion    
+END
+GO
+
+
+
+
+ 
+
+
+
+ **********IMPORTAR ARCHIVOS DE TEXTO********
+
+
+  SELECT SUBSTRING(descripcion_Archivo,1,7) suministro, 
+		SUBSTRING(descripcion_Archivo,8,40) nombrecliente,   
+		SUBSTRING(descripcion_Archivo,48,45) direcc,
+		SUBSTRING(descripcion_Archivo,93,2) sector,
+		SUBSTRING(descripcion_Archivo,95,3) zona,
+		SUBSTRING(descripcion_Archivo,98,4) correla,
+		SUBSTRING(descripcion_Archivo,102,8) medidor,
+		SUBSTRING(descripcion_Archivo,110,34) ceross,
+		SUBSTRING(descripcion_Archivo,144,3) cambiolectura,
+		SUBSTRING(descripcion_Archivo,147,1) dns,
+		SUBSTRING(descripcion_Archivo,148,18) longitud,
+		SUBSTRING(descripcion_Archivo,166,18) latitud
+ FROM TEMP_IMPORTAR_ARCHIVO_TXT
+
+
+
+
+
+
+
+
+
+
+
+
+SELECT 2 MULTIPLE
+
+        <div class="col-lg-4">
+            <label class="col-lg-12 control-label"> Pais</label>
+            <select class="select2" style="width :100%;" name="states[]" multiple="multiple"  id="cbo_pais_filtro" ng-model="Objeto_Parametro_Filtro.id_pais" ng-change="Change_Pais_Grupo_filtro(Objeto_Parametro_Filtro.id_pais)">
+                <option value="0">[--SELECCIONE--]</option>
+                <option ng-repeat="item in Lista_Paises_filtro" value="{{item.id_pais}}">{{item.Pais}}</option>
+            </select>
+        </div>
+
+
+        setTimeout(function () {
+            //Inicializando
+            $("select").select2(); 
+        }, 100);
+
+
+     $('#cbo_pais_filtro').on("change", function (e) {
+        console.log("Selected value is: " + $("#cbo_pais_filtro").select2("val"));
+    });
+
+
+
+
+
+
+		01 6171600 
+ 
+
+
+
+
+
+
+
+
+
+
+

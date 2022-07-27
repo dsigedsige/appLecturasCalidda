@@ -1,0 +1,14 @@
+ ---- REINICIAR ---
+buscador de windows buscar  node.js command prompt  es la consola 
+para ejecutar comandos
+
+cd C:\inetpub\wwwroot\Socket_3R_Dominion
+pm2 restart index.js
+
+
+ ---- INICIAR ---
+buscador de windows, buscar node.js command prompt   es la consola 
+para ejecutar comandos
+
+cd C:\inetpub\wwwroot\Socket_3R_Dominion
+pm2 start index.js
